@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Snapshot]
 (
-	[SnapshotID] INT NOT NULL PRIMARY KEY, 
+	[SnapshotID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
     [BatchRequestsSec] INT NULL, 
     [SQLCompilationsSec] INT NULL, 
     [TransactionsSec] INT NULL, 

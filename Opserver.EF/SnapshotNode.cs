@@ -17,6 +17,7 @@ namespace Opserver.EF
         public int SnapshotID { get; set; }
         public int NodeID { get; set; }
         public System.DateTime Date { get; set; }
+        public int SnapshotCounter { get; set; }
     
         public virtual Node Node { get; set; }
         public virtual Snapshot Snapshot { get; set; }

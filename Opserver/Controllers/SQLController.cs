@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using Opserver;
 using StackExchange.Opserver.Data.SQL;
 using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
@@ -57,6 +58,24 @@ namespace StackExchange.Opserver.Controllers
                 CurrentInstance = i
             };
             return View("Instance", vd);
+        }
+
+        [Route("sql/savesnapshot")]
+        public ActionResult SaveSnapshot(string node)
+        {
+            var i = SQLInstance.Get(node);
+
+            var vd = new InstanceModel
+            {
+                View = SQLViews.Instance,
+                Refresh = node.HasValue() ? 10 : 5,
+                CurrentInstance = i
+            };
+
+            var snapshot = new SnapshotNode(i);
+            snapshot.SaveSnapshot();
+            return View("Instance", vd);
+
         }
 
         [Route("sql/instance/summary/{type}")]

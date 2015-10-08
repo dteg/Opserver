@@ -4,19 +4,19 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="opserver.DataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="opserver.DataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Node">
           <Key>
             <PropertyRef Name="NodeID" />
           </Key>
-          <Property Name="NodeID" Type="int" Nullable="false" />
+          <Property Name="NodeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NodeName" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Snapshot">
           <Key>
             <PropertyRef Name="SnapshotID" />
           </Key>
-          <Property Name="SnapshotID" Type="int" Nullable="false" />
+          <Property Name="SnapshotID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BatchRequestsSec" Type="int" />
           <Property Name="SQLCompilationsSec" Type="int" />
           <Property Name="TransactionsSec" Type="int" />
@@ -42,14 +42,11 @@
           <Property Name="ObjectsInCache" Type="int" />
           <Property Name="CacheHitRatio" Type="float" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'opserver.Data.dbo.SnapshotNode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SnapshotNode">
           <Key>
-            <PropertyRef Name="SnapshotID" />
-            <PropertyRef Name="NodeID" />
-            <PropertyRef Name="Date" />
+            <PropertyRef Name="SnapshotCounter" />
           </Key>
+          <Property Name="SnapshotCounter" Type="int" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="SnapshotID" Type="int" Nullable="false" />
           <Property Name="NodeID" Type="int" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
@@ -81,13 +78,7 @@ warning 6002: The table/view 'opserver.Data.dbo.SnapshotNode' does not have a pr
         <EntityContainer Name="opserverDataModelStoreContainer">
           <EntitySet Name="Node" EntityType="Self.Node" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Snapshot" EntityType="Self.Snapshot" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SnapshotNode" EntityType="Self.SnapshotNode" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [SnapshotNode].[SnapshotID] AS [SnapshotID], 
-    [SnapshotNode].[NodeID] AS [NodeID], 
-    [SnapshotNode].[Date] AS [Date]
-    FROM [dbo].[SnapshotNode] AS [SnapshotNode]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="SnapshotNode" EntityType="Self.SnapshotNode" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_SnapshotNode_Node" Association="Self.FK_SnapshotNode_Node">
             <End Role="Node" EntitySet="Node" />
             <End Role="SnapshotNode" EntitySet="SnapshotNode" />
@@ -97,8 +88,7 @@ warning 6002: The table/view 'opserver.Data.dbo.SnapshotNode' does not have a pr
             <End Role="SnapshotNode" EntitySet="SnapshotNode" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="opserver.DataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -145,13 +135,13 @@ warning 6002: The table/view 'opserver.Data.dbo.SnapshotNode' does not have a pr
           <Key>
             <PropertyRef Name="SnapshotID" />
             <PropertyRef Name="NodeID" />
-            <PropertyRef Name="Date" />
           </Key>
           <Property Name="SnapshotID" Type="Int32" Nullable="false" />
           <Property Name="NodeID" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Node" Relationship="Self.FK_SnapshotNode_Node" FromRole="SnapshotNode" ToRole="Node" />
           <NavigationProperty Name="Snapshot" Relationship="Self.FK_SnapshotNode_Snapshot" FromRole="SnapshotNode" ToRole="Snapshot" />
+          <Property Name="SnapshotCounter" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <Association Name="FK_SnapshotNode_Node">
           <End Role="Node" Type="Self.Node" Multiplicity="1" />
@@ -238,6 +228,7 @@ warning 6002: The table/view 'opserver.Data.dbo.SnapshotNode' does not have a pr
           <EntitySetMapping Name="SnapshotNodes">
             <EntityTypeMapping TypeName="opserver.DataModel.SnapshotNode">
               <MappingFragment StoreEntitySet="SnapshotNode">
+                <ScalarProperty Name="SnapshotCounter" ColumnName="SnapshotCounter" />
                 <ScalarProperty Name="SnapshotID" ColumnName="SnapshotID" />
                 <ScalarProperty Name="NodeID" ColumnName="NodeID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
