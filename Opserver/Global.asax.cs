@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AutoMapper;
 using StackExchange.Exceptional;
 using StackExchange.Opserver.Data;
 using StackExchange.Opserver.Monitoring;
@@ -56,7 +57,7 @@ namespace StackExchange.Opserver
             RegisterRoutes(RouteTable.Routes);
             RegisterBundles(BundleTable.Bundles);
             //BundleTable.EnableOptimizations = true;
-
+            AutoMapperStart.StartMapping();
             SetupMiniProfiler();
 
             ErrorStore.GetCustomData = GetCustomErrorData;

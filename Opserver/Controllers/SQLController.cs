@@ -5,16 +5,20 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using Opserver;
+using StackExchange.Opserver;
+using StackExchange.Opserver.Controllers;
 using StackExchange.Opserver.Data.SQL;
 using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
+using Opserver.Entity;
 
 namespace StackExchange.Opserver.Controllers
 {
     [OnlyAllow(Roles.SQL)]
     public partial class SQLController : StatusController
     {
+        Entities context = new Entities();
         protected override ISecurableSection SettingsSection => Current.Settings.SQL;
 
         protected override string TopTab => TopTabs.BuiltIn.SQL;
@@ -65,16 +69,9 @@ namespace StackExchange.Opserver.Controllers
         {
             var i = SQLInstance.Get(node);
 
-            var vd = new InstanceModel
-            {
-                View = SQLViews.Instance,
-                Refresh = node.HasValue() ? 10 : 5,
-                CurrentInstance = i
-            };
-
-            var snapshot = new SnapshotNode(i);
-            snapshot.SaveSnapshot();
-            return View("Instance", vd);
+            var snapshot = new SnapshotNodeModel(i);
+            snapshot.SaveSnapshot(context);
+            return RedirectToAction("Instance", node);
 
         }
 
