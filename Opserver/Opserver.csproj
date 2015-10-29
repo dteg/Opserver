@@ -179,6 +179,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\AutoMapperStart.cs" />
+    <Compile Include="Helpers\CustomQueries.cs" />
+    <Compile Include="Models\DiskStats.cs" />
     <Compile Include="Models\SnapshotModel.cs" />
     <Compile Include="Views\SQL\Instance.Model.cs">
       <DependentUpon>Instance.cshtml</DependentUpon>
@@ -665,6 +667,7 @@
     <Content Include="Views\Redis\Instance.SlowLog.cshtml" />
     <Content Include="Views\Redis\Instance.Config.cshtml" />
     <Content Include="Views\SQL\_ViewStart.cshtml" />
+    <Content Include="Views\SQL\Charts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\ajax-loader.gif" />

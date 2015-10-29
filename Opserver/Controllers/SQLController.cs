@@ -64,14 +64,22 @@ namespace StackExchange.Opserver.Controllers
             return View("Instance", vd);
         }
 
+        [Route("sql/charts")]
+        public ActionResult Charts(string node)
+        {
+            return View("Charts");
+        }
+
         [Route("sql/savesnapshot")]
         public ActionResult SaveSnapshot(string node)
         {
             var i = SQLInstance.Get(node);
-
+            CustomQueries.GetDiskSpaceStats(context);
             var snapshot = new SnapshotNodeModel(i);
+            //var test = AutoMapper.Mapper.Map<SnapshotNode>(snapshot);
             snapshot.SaveSnapshot(context);
-            return RedirectToAction("Instance", node);
+            
+            return RedirectToAction("Instance","SQL", node);
 
         }
 

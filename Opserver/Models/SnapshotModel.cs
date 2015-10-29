@@ -50,7 +50,11 @@ namespace Opserver
 
 
         }
-
+        /// <summary>
+        /// Takes the context and saves a database performance snapshot 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public string SaveSnapshot(Entities context)
         {
             //Check if node exists in db
@@ -67,7 +71,7 @@ namespace Opserver
                 context.SaveChanges();
                 NodeID = node.NodeID;
             }
-
+            //Create the snapshot using current object
             var snapshot = context.Snapshots.Add(new Snapshot 
             {
                 BatchRequestsSec = BatchRequestsSec,
@@ -110,6 +114,21 @@ namespace Opserver
 
             return "Success";
         }
+
+       /* public string RetrieveSnapshot()
+        {
+            //This is the whole database
+            var context = new Entities();
+            //This will return the node that has the ID of 0
+            var node = context.Nodes.FirstOrDefault(x => x.NodeID == 0);
+
+            foreach (var snapshotnode in node.SnapshotNodes)
+            {
+                var snapshot = snapshotnode.Snapshot;
+                snapshot.
+            }
+            return "";
+        } */
         public int NodeID { get; set; }
         public string NodeName { get; set; }
 

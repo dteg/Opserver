@@ -374,7 +374,7 @@ Avgerage Write Stall: @v.AvgWriteStallMS ms">
                     </tbody>
                 </table>
             </div>
-            @*<div class="section-wrap">
+            <div class="section-wrap">
                 <div class="summary-section-header">Waits</div>
                 <table>
                     <thead>
@@ -399,7 +399,7 @@ Avgerage Write Stall: @v.AvgWriteStallMS ms">
                     @RenderPerSecCounter("Wait Statistics", "Memory grant queue waits", "Cumulative wait time (ms) per second")
                     </tbody>
                 </table>
-            </div>*@
+            </div>
             
             <div class="section-wrap refresh-group" data-name="instance-cache">
                 <table>
@@ -428,9 +428,9 @@ Avgerage Write Stall: @v.AvgWriteStallMS ms">
 
             </div>
             
-            @*<div class="section-wrap">
+            <div class="section-wrap">
                 <table>
-                    @SectionHeader("Performance")
+                    @Helpers.SectionHeader("Performance")
                     <tbody>
                         @RenderCounter("General Statistics", "User Connections", "")
                         @RenderCounter("General Statistics", "Connection Reset/sec", "")
@@ -442,7 +442,7 @@ Avgerage Write Stall: @v.AvgWriteStallMS ms">
                         @RenderCounter("Workload Group Stats", "Requests completed/sec", "default")
                     </tbody>
                 </table>
-            </div>*@
+            </div>
         }
         @if (services.Any())
         {
