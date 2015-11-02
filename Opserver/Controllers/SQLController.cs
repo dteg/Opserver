@@ -55,6 +55,7 @@ namespace StackExchange.Opserver.Controllers
         {
             var i = SQLInstance.Get(node);
 
+
             var vd = new InstanceModel
             {
                 View = SQLViews.Instance,
@@ -74,7 +75,6 @@ namespace StackExchange.Opserver.Controllers
         public ActionResult SaveSnapshot(string node)
         {
             var i = SQLInstance.Get(node);
-            CustomQueries.GetDiskSpaceStats(context);
             var snapshot = new SnapshotNodeModel(i);
             //var test = AutoMapper.Mapper.Map<SnapshotNode>(snapshot);
             snapshot.SaveSnapshot(context);
