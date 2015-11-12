@@ -9,7 +9,9 @@ namespace StackExchange.Opserver.Views.SQL
         Active,
         Top,
         Connections,
-        Databases
+        Databases,
+        Compare,
+        Charts
     }
 
     public class DashboardModel

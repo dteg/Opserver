@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using StackExchange.Opserver;
 using StackExchange.Opserver.Data.SQL;
 using Opserver.Entity;
+using System.Web.Mvc;
 
 namespace Opserver
 {
@@ -50,6 +51,8 @@ namespace Opserver
 
 
         }
+        public SnapshotNodeModel() { }
+
         /// <summary>
         /// Takes the context and saves a database performance snapshot 
         /// </summary>
@@ -115,20 +118,70 @@ namespace Opserver
             return "Success";
         }
 
-       /* public string RetrieveSnapshot()
+        /// <summary>
+        /// Return the list of NodeIDs and Names for select list
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static List<SelectListItem> GetNodes(Entities context)
         {
-            //This is the whole database
-            var context = new Entities();
-            //This will return the node that has the ID of 0
-            var node = context.Nodes.FirstOrDefault(x => x.NodeID == 0);
-
-            foreach (var snapshotnode in node.SnapshotNodes)
+            var list = new List<SelectListItem>();
+            foreach (var node in context.Nodes)
             {
-                var snapshot = snapshotnode.Snapshot;
-                snapshot.
+                foreach (var snapshotID in node.SnapshotNodes)
+                {
+                    list.Add(new SelectListItem
+                    {
+                        Value = snapshotID.SnapshotID.ToString(),
+                        Text = node.NodeName + "-" + snapshotID.Date
+                    });
+                }
+                
             }
-            return "";
-        } */
+            return list;
+        }
+        /// <summary>
+        /// Assign itself value based on a context that is passed.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+       public static SnapshotNodeModel GetByID(int id, Entities context)
+       {
+           var efSnapShot = context.Snapshots.FirstOrDefault(x => x.SnapshotID == id);
+
+           var snapshot = new SnapshotNodeModel{
+               BatchRequestsSec = efSnapShot.BatchRequestsSec,
+               SQLCompilationsSec = efSnapShot.SQLCompilationsSec,
+               TransactionsSec = efSnapShot.TransactionsSec,
+               IndexSearchesSec = efSnapShot.IndexSearchesSec,
+               LockRequestsSec = efSnapShot.LockRequestsSec,
+               ErrorsSec = efSnapShot.ErrorsSec,
+               CPU = efSnapShot.CPU,
+               RAM = efSnapShot.RAM,
+               Connections = efSnapShot.Connections,
+               Sessions = efSnapShot.Sessions,
+               MaxWorkers = efSnapShot.MaxWorkers,
+               TotalServerMemory = efSnapShot.TotalServerMemory,
+               TargetServerMemory = efSnapShot.TargetServerMemory,
+               DatabaseCacheMemory = efSnapShot.DatabaseCacheMemory,
+               FreeMemory = efSnapShot.FreeMemory,
+               DataFilesSize = efSnapShot.DataFilesSize,
+               LogFileSize = efSnapShot.LogFileSize,
+               LogFileUsedSize = efSnapShot.LogFileUsedSize,
+               FreeSpaceinTempDB = efSnapShot.FreeSpaceinTempDB,
+               PageLifeExpectancy = efSnapShot.PageLifeExpectancy,
+               PageLookupsSec = efSnapShot.PageLookupsSec,
+               DatabasePages = efSnapShot.DatabasePages,
+               ObjectsInCache = efSnapShot.ObjectsInCache,
+               CacheHitRatio = efSnapShot.CacheHitRatio,
+               Date = efSnapShot.SnapshotNodes.FirstOrDefault(x=> x.SnapshotID == id).Date,
+               NodeName = efSnapShot.SnapshotNodes.FirstOrDefault(x=> x.SnapshotID == id).Node.NodeName,
+           };
+
+            return snapshot;
+       } 
+
         public int NodeID { get; set; }
         public string NodeName { get; set; }
 

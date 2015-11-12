@@ -12,6 +12,7 @@ using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
 using Opserver.Entity;
+using System.Collections.Generic;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -81,6 +82,24 @@ namespace StackExchange.Opserver.Controllers
             
             return RedirectToAction("Instance","SQL", node);
 
+        }
+
+        [Route("sql/compare")]
+        public ActionResult Compare()
+        {
+            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
+            return View();
+        }
+
+        [Route("sql/compare")]
+        [HttpPost]
+        public ActionResult Compare(int snapID1, int snapID2)
+        {
+            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
+            var list = new List<SnapshotNodeModel>();
+            list.Add(SnapshotNodeModel.GetByID(snapID1, context));
+            list.Add(SnapshotNodeModel.GetByID(snapID2, context));
+            return View(list);
         }
 
         [Route("sql/instance/summary/{type}")]

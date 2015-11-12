@@ -1,0 +1,228 @@
+﻿@model List<Opserver.SnapshotNodeModel>
+
+@{
+    ViewBag.Title = "Compare";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css">
+<script src="~/Scripts/bootstrap.js"></script>
+<style type="text/css">
+    h4{
+        border-bottom: none;
+    }
+
+    .full-width{
+        width: 100%;
+    }
+</style>
+
+<div class="bottom-sub-section">
+    <div class="summary-dashboard">
+        <h3 class="header">Compare</h3>
+        @using (Html.BeginForm("Compare", "Admin", FormMethod.Post))
+            {
+            <div class="col-md-3">
+                @Html.DropDownList("snapID1", new SelectList(ViewBag.NodeList, "Value", "Text", new { @class = "selectpicker" }))
+            </div>
+                <div class="col-md-3">
+                    @Html.DropDownList("snapID2", new SelectList(ViewBag.NodeList, "Value", "Text", new { @class = "selectpicker" }))
+                </div>
+                <input class="btn btn-primary" type="submit" value="Compare" />
+        }
+    </div>
+</div>
+@if (Model != null) {
+<div class="container">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Performance
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <table class="table-striped table-responsive full-width">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>@Model[0].NodeName - @Model[0].Date</th>
+                                <th>@Model[1].NodeName - @Model[1].Date</th>
+                                <th>Difference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Batch Requests/sec</td>
+                                <td>@Model[0].BatchRequestsSec</td>
+                                <td>@Model[1].BatchRequestsSec</td>
+                                <td>@(Model[0].BatchRequestsSec - @Model[1].BatchRequestsSec)</td>
+                            </tr>
+                            <tr>
+                                <td>SQL Complications/sec</td>
+                                <td>@Model[0].SQLCompilationsSec</td>
+                                <td>@Model[1].SQLCompilationsSec</td>
+                                <td>@(Model[0].SQLCompilationsSec - @Model[1].SQLCompilationsSec)</td>
+                            </tr>
+                            <tr>
+                                <td>Transactions/sec</td>
+                                <td>@Model[0].TransactionsSec</td>
+                                <td>@Model[1].TransactionsSec</td>
+                                <td>@(Model[0].TransactionsSec - @Model[1].TransactionsSec)</td>
+                            </tr>
+                            <tr>
+                                <td>Index Searches/sec</td>
+                                <td>@Model[0].IndexSearchesSec</td>
+                                <td>@Model[1].IndexSearchesSec</td>
+                                <td>@(Model[0].IndexSearchesSec - @Model[1].IndexSearchesSec)</td>
+                            </tr>
+                            <tr>
+                                <td>Lock Requests/sec</td>
+                                <td>@Model[0].LockRequestsSec</td>
+                                <td>@Model[1].LockRequestsSec</td>
+                                <td>@(Model[0].LockRequestsSec - @Model[1].LockRequestsSec)</td>
+                            </tr>
+                            <tr>
+                                <td>Errors/sec</td>
+                                <td>@Model[0].ErrorsSec</td>
+                                <td>@Model[1].ErrorsSec</td>
+                                <td>@(Model[0].ErrorsSec - @Model[1].ErrorsSec)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                        Sizes
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <table class="table-striped table-responsive full-width">
+                        <thead>
+                            <tr>
+                                <th>Metric (KB)</th>
+                                <th>@Model[0].NodeName - @Model[0].Date</th>
+                                <th>@Model[1].NodeName - @Model[1].Date</th>
+                                <th>Difference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total Server Memory</td>
+                                <td>@Model[0].TotalServerMemory</td>
+                                <td>@Model[1].TotalServerMemory</td>
+                                <td>@(Model[0].TotalServerMemory - @Model[1].TotalServerMemory)</td>
+                            </tr>
+                            <tr>
+                                <td>Target Server Memory</td>
+                                <td>@Model[0].TargetServerMemory</td>
+                                <td>@Model[1].TargetServerMemory</td>
+                                <td>@(Model[0].TargetServerMemory - @Model[1].TargetServerMemory)</td>
+                            </tr>
+                            <tr>
+                                <td>Database Cache Memory</td>
+                                <td>@Model[0].DatabaseCacheMemory</td>
+                                <td>@Model[1].DatabaseCacheMemory</td>
+                                <td>@(Model[0].DatabaseCacheMemory- @Model[1].DatabaseCacheMemory)</td>
+                            </tr>
+                            <tr>
+                                <td>Free Memory</td>
+                                <td>@Model[0].FreeMemory</td>
+                                <td>@Model[1].FreeMemory</td>
+                                <td>@(Model[0].FreeMemory - @Model[1].FreeMemory)</td>
+                            </tr>
+                            <tr>
+                                <td>Data File(s) Size</td>
+                                <td>@Model[0].DataFilesSize</td>
+                                <td>@Model[1].DataFilesSize</td>
+                                <td>@(Model[0].DataFilesSize - @Model[1].DataFilesSize)</td>
+                            </tr>
+                            <tr>
+                                <td>Log File Size</td>
+                                <td>@Model[0].LogFileSize</td>
+                                <td>@Model[1].LogFileSize</td>
+                                <td>@(Model[0].LogFileSize - @Model[1].LogFileSize)</td>
+                            </tr>
+                            <tr>
+                                <td>Log File Used Size</td>
+                                <td>@Model[0].LogFileUsedSize</td>
+                                <td>@Model[1].LogFileUsedSize</td>
+                                <td>@(Model[0].LogFileUsedSize- @Model[1].LogFileUsedSize)</td>
+                            </tr>
+                            <tr>
+                                <td>Free Space in tempdb</td>
+                                <td>@Model[0].FreeSpaceinTempDB</td>
+                                <td>@Model[1].FreeSpaceinTempDB</td>
+                                <td>@(Model[0].FreeSpaceinTempDB- @Model[1].FreeSpaceinTempDB)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+                        Cache
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <table class="table-striped table-responsive full-width">
+                        <thead>
+                            <tr>
+                                <th>Metric (KB)</th>
+                                <th>@Model[0].NodeName - @Model[0].Date</th>
+                                <th>@Model[1].NodeName - @Model[1].Date</th>
+                                <th>Difference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Page Life Expectancy</td>
+                                <td>@Model[0].PageLifeExpectancy</td>
+                                <td>@Model[1].PageLifeExpectancy</td>
+                                <td>@(Model[0].PageLifeExpectancy - @Model[1].PageLifeExpectancy)</td>
+                            </tr>
+                            <tr>
+                                <td>Page Lookups/sec</td>
+                                <td>@Model[0].PageLookupsSec</td>
+                                <td>@Model[1].PageLookupsSec</td>
+                                <td>@(Model[0].PageLookupsSec- @Model[1].PageLookupsSec)</td>
+                            </tr>
+                            <tr>
+                                <td>Database Pages</td>
+                                <td>@Model[0].DatabasePages</td>
+                                <td>@Model[1].DatabasePages</td>
+                                <td>@(Model[0].DatabasePages - @Model[1].DatabasePages)</td>
+                            </tr>
+                            <tr>
+                                <td>Objects In Cache</td>
+                                <td>@Model[0].ObjectsInCache</td>
+                                <td>@Model[1].ObjectsInCache</td>
+                                <td>@(Model[0].ObjectsInCache- @Model[1].ObjectsInCache)</td>
+                            </tr>
+                            <tr>
+                                <td>Cache Hit Ratio</td>
+                                <td>@Model[0].CacheHitRatio</td>
+                                <td>@Model[1].CacheHitRatio</td>
+                                <td>@(Model[0].CacheHitRatio - @Model[1].CacheHitRatio)</td>
+                            </tr>
+                         </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
