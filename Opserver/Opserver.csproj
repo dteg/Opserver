@@ -180,6 +180,7 @@
   <ItemGroup>
     <Compile Include="Helpers\AutoMapperStart.cs" />
     <Compile Include="Helpers\CustomQueries.cs" />
+    <Compile Include="Models\ChartsModel.cs" />
     <Compile Include="Models\DiskStats.cs" />
     <Compile Include="Models\SnapshotModel.cs" />
     <Compile Include="Views\SQL\Instance.Model.cs">

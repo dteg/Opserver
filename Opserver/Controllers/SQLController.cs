@@ -12,7 +12,6 @@ using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
 using Opserver.Entity;
-using System.Collections.Generic;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -56,7 +55,6 @@ namespace StackExchange.Opserver.Controllers
         {
             var i = SQLInstance.Get(node);
 
-
             var vd = new InstanceModel
             {
                 View = SQLViews.Instance,
@@ -69,37 +67,34 @@ namespace StackExchange.Opserver.Controllers
         [Route("sql/charts")]
         public ActionResult Charts(string node)
         {
-            return View("Charts");
+            var nodeID = 0;
+
+            if (node == null)
+            {
+                //node = "0";
+                return View("Instance.Selector", new DashboardModel());
+            }
+            else
+            {
+                nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+                ChartsModel theModel = new ChartsModel(context, nodeID);
+                return View("Charts", theModel);
+            }
+          
+           
         }
 
         [Route("sql/savesnapshot")]
         public ActionResult SaveSnapshot(string node)
         {
             var i = SQLInstance.Get(node);
+            //CustomQueries.GetDiskSpaceStats(context);
             var snapshot = new SnapshotNodeModel(i);
             //var test = AutoMapper.Mapper.Map<SnapshotNode>(snapshot);
             snapshot.SaveSnapshot(context);
             
             return RedirectToAction("Instance","SQL", node);
 
-        }
-
-        [Route("sql/compare")]
-        public ActionResult Compare()
-        {
-            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
-            return View();
-        }
-
-        [Route("sql/compare")]
-        [HttpPost]
-        public ActionResult Compare(int snapID1, int snapID2)
-        {
-            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
-            var list = new List<SnapshotNodeModel>();
-            list.Add(SnapshotNodeModel.GetByID(snapID1, context));
-            list.Add(SnapshotNodeModel.GetByID(snapID2, context));
-            return View(list);
         }
 
         [Route("sql/instance/summary/{type}")]
