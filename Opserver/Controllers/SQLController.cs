@@ -67,14 +67,28 @@ namespace StackExchange.Opserver.Controllers
         [Route("sql/charts")]
         public ActionResult Charts(string node)
         {
-            return View("Charts");
+            var nodeID = 0;
+
+            if (node == null)
+            {
+                //node = "0";
+                return View("Instance.Selector", new DashboardModel());
+            }
+            else
+            {
+                nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+                ChartsModel theModel = new ChartsModel(context, nodeID);
+                return View("Charts", theModel);
+            }
+          
+           
         }
 
         [Route("sql/savesnapshot")]
         public ActionResult SaveSnapshot(string node)
         {
             var i = SQLInstance.Get(node);
-            CustomQueries.GetDiskSpaceStats(context);
+            //CustomQueries.GetDiskSpaceStats(context);
             var snapshot = new SnapshotNodeModel(i);
             //var test = AutoMapper.Mapper.Map<SnapshotNode>(snapshot);
             snapshot.SaveSnapshot(context);

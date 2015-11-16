@@ -180,6 +180,7 @@
   <ItemGroup>
     <Compile Include="Helpers\AutoMapperStart.cs" />
     <Compile Include="Helpers\CustomQueries.cs" />
+    <Compile Include="Models\ChartsModel.cs" />
     <Compile Include="Models\DiskStats.cs" />
     <Compile Include="Models\SnapshotModel.cs" />
     <Compile Include="Views\SQL\Instance.Model.cs">
@@ -195,6 +196,10 @@
       <DependentUpon>Servers.cshtml</DependentUpon>
     </Compile>
     <Content Include="Config\Readme.txt" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Common.css">
       <DependentUpon>Common.less</DependentUpon>
     </Content>
@@ -265,6 +270,8 @@
     <Content Include="Config\JiraSettings.json.example" />
     <None Include="compilerconfig.json" />
     <None Include="Config\PagerDutySettings.json.example" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Content\_Styles.HeadsUp.less">
       <DependentUpon>Styles.less</DependentUpon>
     </None>
@@ -347,7 +354,14 @@
     <Compile Include="Controllers\PagerDutyController.Admin.cs">
       <DependentUpon>PagerDutyController.cs</DependentUpon>
     </Compile>
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Help\SQL\WaitStats.md" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\highcharts\4.1.5\adapters\standalone-framework.js" />
     <Content Include="Scripts\highcharts\4.1.5\adapters\standalone-framework.src.js" />
     <Content Include="Scripts\highcharts\4.1.5\highcharts-3d.js" />
@@ -384,6 +398,9 @@
     <Content Include="Scripts\highcharts\4.1.5\themes\grid.js" />
     <Content Include="Scripts\highcharts\4.1.5\themes\sand-signika.js" />
     <Content Include="Scripts\highcharts\4.1.5\themes\skies.js" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Views\CloudFlare\Railguns.cshtml" />
     <Content Include="Views\CloudFlare\Dashboard.cshtml" />
     <Content Include="Views\Exceptions\Exceptions.Table.Rows.cshtml" />
@@ -668,6 +685,7 @@
     <Content Include="Views\Redis\Instance.Config.cshtml" />
     <Content Include="Views\SQL\_ViewStart.cshtml" />
     <Content Include="Views\SQL\Charts.cshtml" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\ajax-loader.gif" />
