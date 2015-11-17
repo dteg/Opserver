@@ -29,13 +29,10 @@
 <div class="summary-dashboard">
     <h3 class="header">
         <a href="/sql/servers">SQL Instances</a><span class="note">:</span> @i.IconSpan() @i.Name
-<<<<<<< HEAD
         <a href=@Url.Action("SaveSnapshot", "SQL", new { node = i.Name }) class="reload-link" > <i class="fa fa-download"></i> Save</a>
-=======
         @Helpers.PollNow(i)
         @Html.ActionLink("Snapshot", "SaveSnapshot", new{node = i.Name})
-        | @Html.ActionLink("Charts", "Charts", new { node = i.Name })
->>>>>>> 840f23bbe118c7a36ca280c86e6f56feaab88bbe
+        @Html.ActionLink("Charts", "Charts", new { node = i.Name })
     </h3>
 @if (i.LastFetch == null)
 {

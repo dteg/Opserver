@@ -12,6 +12,7 @@ using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
 using Opserver.Entity;
+using System.Collections.Generic;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -97,7 +98,6 @@ namespace StackExchange.Opserver.Controllers
 
         }
 
-<<<<<<< HEAD
         [Route("sql/compare")]
         public ActionResult Compare(string node)
         {
@@ -116,8 +116,6 @@ namespace StackExchange.Opserver.Controllers
             return View(list);
         }
 
-=======
->>>>>>> 840f23bbe118c7a36ca280c86e6f56feaab88bbe
         [Route("sql/instance/summary/{type}")]
         public ActionResult InstanceSummary(string node, string type)
         {
