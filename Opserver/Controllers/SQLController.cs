@@ -12,7 +12,6 @@ using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
 using Opserver.Entity;
-using System.Collections.Generic;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -56,7 +55,6 @@ namespace StackExchange.Opserver.Controllers
         {
             var i = SQLInstance.Get(node);
 
-
             var vd = new InstanceModel
             {
                 View = SQLViews.Instance,
@@ -69,13 +67,28 @@ namespace StackExchange.Opserver.Controllers
         [Route("sql/charts")]
         public ActionResult Charts(string node)
         {
-            return View("Charts");
+            var nodeID = 0;
+
+            if (node == null)
+            {
+                //node = "0";
+                return View("Instance.Selector", new DashboardModel());
+            }
+            else
+            {
+                nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+                ChartsModel theModel = new ChartsModel(context, nodeID);
+                return View("Charts", theModel);
+            }
+          
+           
         }
 
         [Route("sql/savesnapshot")]
         public ActionResult SaveSnapshot(string node)
         {
             var i = SQLInstance.Get(node);
+            //CustomQueries.GetDiskSpaceStats(context);
             var snapshot = new SnapshotNodeModel(i);
             //var test = AutoMapper.Mapper.Map<SnapshotNode>(snapshot);
             snapshot.SaveSnapshot(context);
@@ -84,6 +97,7 @@ namespace StackExchange.Opserver.Controllers
 
         }
 
+<<<<<<< HEAD
         [Route("sql/compare")]
         public ActionResult Compare(string node)
         {
@@ -102,6 +116,8 @@ namespace StackExchange.Opserver.Controllers
             return View(list);
         }
 
+=======
+>>>>>>> 840f23bbe118c7a36ca280c86e6f56feaab88bbe
         [Route("sql/instance/summary/{type}")]
         public ActionResult InstanceSummary(string node, string type)
         {
