@@ -5,37 +5,69 @@
     Layout = "~/Views/Shared/Master.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="~/Content/font-awesome.css">
 <script src="~/Scripts/bootstrap.js"></script>
 <style type="text/css">
-    h4{
+    h4 {
         border-bottom: none;
     }
 
-    .full-width{
+    .full-width {
         width: 100%;
     }
+
+    .btn {
+        float: none;
+    }
 </style>
+
+<div class="tabs sub-tabs">
+    <div class="tabs-links">
+        <a class="selected" href="/sql/servers">all servers</a>
+
+        <a class="" href="/sql/instance">instance</a>
+
+        <a class="" href="/sql/top">top</a>
+
+        <a class="" href="/sql/active">active</a>
+
+        <a class="" href="/sql/connections">connections</a>
+
+        <a class="" href="/sql/databases">databases</a>
+
+        <a class="" href="charts">charts</a>
+
+        <a class="" href="compare">compare</a>
+
+    </div>
+</div>
+
 
 <div class="bottom-sub-section">
     <div class="summary-dashboard">
         <h3 class="header">Compare</h3>
-        @using (Html.BeginForm("Compare", "Admin", FormMethod.Post))
+            @using (Html.BeginForm("Compare", "Admin", FormMethod.Post))
             {
-            <div class="col-md-3">
-                @Html.DropDownList("snapID1", new SelectList(ViewBag.NodeList, "Value", "Text", new { @class = "selectpicker" }))
-            </div>
-                <div class="col-md-3">
-                    @Html.DropDownList("snapID2", new SelectList(ViewBag.NodeList, "Value", "Text", new { @class = "selectpicker" }))
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.DropDownList("snapID1", new SelectList(ViewBag.NodeList, "Value", "Text"), new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.DropDownList("snapID2", new SelectList(ViewBag.NodeList, "Value", "Text"), new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn btn-primary" type="submit" value="Compare"><i class="fa fa-sliders"></i> Compare</button>
+                    </div>
                 </div>
-                <input class="btn btn-primary" type="submit" value="Compare" />
-        }
+            }
     </div>
 </div>
-@if (Model != null) {
-<div class="container">
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-primary">
-            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" style="cursor: pointer" role="tab" id="headingOne" href="#collapseOne">
+@if (Model != null)
+{
+    <div class="container">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-primary">
+                <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" style="cursor: pointer" role="tab" id="headingOne" href="#collapseOne">
                     <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             Performance
@@ -95,8 +127,8 @@
                     </div>
                 </div>
             </div>
-        <div class="panel panel-warning">
-            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" style="cursor: pointer" role="tab" id="headingTwo" href="#collapseTwo">
+            <div class="panel panel-warning">
+                <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" style="cursor: pointer" role="tab" id="headingTwo" href="#collapseTwo">
                     <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
                             Sizes
@@ -168,61 +200,61 @@
                     </div>
                 </div>
             </div>
-        <div class="panel panel-success">
-            <div class="panel-heading"  data-toggle="collapse" data-parent="#accordion" style="cursor: pointer" role="tab" id="headingThree" href="#collapseThree">
-                <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
-                        Cache
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
-                <div class="panel-body">
-                    <table class="table-striped table-responsive full-width">
-                        <thead>
-                            <tr>
-                                <th>Metric (KB)</th>
-                                <th>@Model[0].NodeName - @Model[0].Date</th>
-                                <th>@Model[1].NodeName - @Model[1].Date</th>
-                                <th>Difference</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Page Life Expectancy</td>
-                                <td>@Model[0].PageLifeExpectancy</td>
-                                <td>@Model[1].PageLifeExpectancy</td>
-                                <td>@(Model[0].PageLifeExpectancy - @Model[1].PageLifeExpectancy)</td>
-                            </tr>
-                            <tr>
-                                <td>Page Lookups/sec</td>
-                                <td>@Model[0].PageLookupsSec</td>
-                                <td>@Model[1].PageLookupsSec</td>
-                                <td>@(Model[0].PageLookupsSec- @Model[1].PageLookupsSec)</td>
-                            </tr>
-                            <tr>
-                                <td>Database Pages</td>
-                                <td>@Model[0].DatabasePages</td>
-                                <td>@Model[1].DatabasePages</td>
-                                <td>@(Model[0].DatabasePages - @Model[1].DatabasePages)</td>
-                            </tr>
-                            <tr>
-                                <td>Objects In Cache</td>
-                                <td>@Model[0].ObjectsInCache</td>
-                                <td>@Model[1].ObjectsInCache</td>
-                                <td>@(Model[0].ObjectsInCache- @Model[1].ObjectsInCache)</td>
-                            </tr>
-                            <tr>
-                                <td>Cache Hit Ratio</td>
-                                <td>@Model[0].CacheHitRatio</td>
-                                <td>@Model[1].CacheHitRatio</td>
-                                <td>@(Model[0].CacheHitRatio - @Model[1].CacheHitRatio)</td>
-                            </tr>
-                         </tbody>
-                    </table>
+            <div class="panel panel-success">
+                <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" style="cursor: pointer" role="tab" id="headingThree" href="#collapseThree">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+                            Cache
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
+                    <div class="panel-body">
+                        <table class="table-striped table-responsive full-width">
+                            <thead>
+                                <tr>
+                                    <th>Metric (KB)</th>
+                                    <th>@Model[0].NodeName - @Model[0].Date</th>
+                                    <th>@Model[1].NodeName - @Model[1].Date</th>
+                                    <th>Difference</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Page Life Expectancy</td>
+                                    <td>@Model[0].PageLifeExpectancy</td>
+                                    <td>@Model[1].PageLifeExpectancy</td>
+                                    <td>@(Model[0].PageLifeExpectancy - @Model[1].PageLifeExpectancy)</td>
+                                </tr>
+                                <tr>
+                                    <td>Page Lookups/sec</td>
+                                    <td>@Model[0].PageLookupsSec</td>
+                                    <td>@Model[1].PageLookupsSec</td>
+                                    <td>@(Model[0].PageLookupsSec - @Model[1].PageLookupsSec)</td>
+                                </tr>
+                                <tr>
+                                    <td>Database Pages</td>
+                                    <td>@Model[0].DatabasePages</td>
+                                    <td>@Model[1].DatabasePages</td>
+                                    <td>@(Model[0].DatabasePages - @Model[1].DatabasePages)</td>
+                                </tr>
+                                <tr>
+                                    <td>Objects In Cache</td>
+                                    <td>@Model[0].ObjectsInCache</td>
+                                    <td>@Model[1].ObjectsInCache</td>
+                                    <td>@(Model[0].ObjectsInCache - @Model[1].ObjectsInCache)</td>
+                                </tr>
+                                <tr>
+                                    <td>Cache Hit Ratio</td>
+                                    <td>@Model[0].CacheHitRatio</td>
+                                    <td>@Model[1].CacheHitRatio</td>
+                                    <td>@(Model[0].CacheHitRatio - @Model[1].CacheHitRatio)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 }

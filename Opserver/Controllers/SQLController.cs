@@ -85,7 +85,7 @@ namespace StackExchange.Opserver.Controllers
         }
 
         [Route("sql/compare")]
-        public ActionResult Compare()
+        public ActionResult Compare(string node)
         {
             ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
             return View();

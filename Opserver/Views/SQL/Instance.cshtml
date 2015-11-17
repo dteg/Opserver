@@ -21,12 +21,15 @@
         });
     });
 </script>
+<link rel="stylesheet" type="text/css" href="~/Content/font-awesome.css">
+
+
+
 <div class="bottom-sub-section">
 <div class="summary-dashboard">
     <h3 class="header">
         <a href="/sql/servers">SQL Instances</a><span class="note">:</span> @i.IconSpan() @i.Name
-        @Helpers.PollNow(i)
-        @Html.ActionLink("Snapshot", "SaveSnapshot", new{node = i.Name})
+        <a href=@Url.Action("SaveSnapshot", "SQL", new { node = i.Name }) class="reload-link" > <i class="fa fa-download"></i> Save</a>
     </h3>
 @if (i.LastFetch == null)
 {

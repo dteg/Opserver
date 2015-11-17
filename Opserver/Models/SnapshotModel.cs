@@ -133,11 +133,13 @@ namespace Opserver
                     list.Add(new SelectListItem
                     {
                         Value = snapshotID.SnapshotID.ToString(),
-                        Text = node.NodeName + "-" + snapshotID.Date
+                        Text = node.NodeName + " - " + snapshotID.Date
                     });
                 }
                 
             }
+            list.OrderBy( x=> x.Text);
+
             return list;
         }
         /// <summary>
