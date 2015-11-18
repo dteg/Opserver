@@ -686,6 +686,7 @@
     <Content Include="Views\SQL\_ViewStart.cshtml" />
     <Content Include="Views\SQL\Charts.cshtml" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\SQL\NodeSelector.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\ajax-loader.gif" />

@@ -72,11 +72,20 @@ namespace StackExchange.Opserver.Controllers
             if (node == null)
             {
                 //node = "0";
-                return View("Instance.Selector", new DashboardModel());
+                return View("NodeSelector", new DashboardModel());
             }
             else
             {
-                nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+                try
+                {
+                    nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+                   
+                }
+                catch(Exception e)
+                {
+                    return View("NodeSelector", new DashboardModel());
+                }
+
                 ChartsModel theModel = new ChartsModel(context, nodeID);
                 return View("Charts", theModel);
             }
