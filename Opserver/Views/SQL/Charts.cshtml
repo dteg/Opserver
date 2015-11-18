@@ -2,58 +2,33 @@
 @using StackExchange.Opserver.Views.SQL
 @model StackExchange.Opserver.Models.ChartsModel
 @{
-	this.SetPageTitle("Charts");
-	Layout = "~/Views/Shared/Master.cshtml";
+    this.SetPageTitle("Charts");
+    Layout = "~/Views/Shared/Master.cshtml";
 
-	var brs_data = Model.brs_json;
-	var sqlc_data = Model.SQLCompilationsSec_json;
-	var trs_data = Model.trs_json;
-	var idxs_data = Model.idxs_json;
-	var lrs_data = Model.lrs_json;
-	var ers_data = Model.ers_json;
-	var cpu_data = Model.cpu_json;
-	var ram_data = Model.ram_json;
-	var connections_data = Model.connections_json;
+    var brs_data = Model.brs_json;
+    var sqlc_data = Model.SQLCompilationsSec_json;
+    var trs_data = Model.trs_json;
+    var idxs_data = Model.idxs_json;
+    var lrs_data = Model.lrs_json;
+    var ers_data = Model.ers_json;
+    var cpu_data = Model.cpu_json;
+    var ram_data = Model.ram_json;
+    var connections_data = Model.connections_json;
 }
 
-<<<<<<< HEAD
-<div class="tabs sub-tabs">
-	<div class="tabs-links">
-		<a class="selected" href="/sql/servers">all servers</a>
-
-		<a class="" href="/sql/instance">instance</a>
-
-		<a class="" href="/sql/top">top</a>
-
-		<a class="" href="/sql/active">active</a>
-
-		<a class="" href="/sql/connections">connections</a>
-
-		<a class="" href="/sql/databases">databases</a>
-
-		<a class="" href="charts">charts</a>
-
-		<a class="" href="compare">compare</a>
-
-	</div>
-</div>
-
-<h2>Charts</h2>
-LOREM IPSUM SI DOLOR AMET.
-=======
-
 <head>
-<script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/highcharts/4.1.5/highcharts.js"></script>
-<script src="~/Scripts/highcharts/4.1.5/modules/exporting.js"></script>
-<script src="~/Scripts/bootstrap.js"></script>
+	<script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/highcharts/4.1.5/highcharts.js"></script>
+	<script src="~/Scripts/highcharts/4.1.5/modules/exporting.js"></script>
+	<script src="~/Scripts/bootstrap.js"></script>
 
-<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"></link>
-<link rel="stylesheet" type="text/css" href="~/Content/bootstrap-theme.css"></link>
-	   
+	<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"></link>
+	<link rel="stylesheet" type="text/css" href="~/Content/bootstrap-theme.css"></link>
+	
+</head>
 
+@{Html.RenderPartial("~/Views/Shared/_Menu.cshtml");}
 
-	</head>
 <body>
 
 

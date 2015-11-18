@@ -21,6 +21,14 @@
         });
     });
 </script>
+
+<style>
+    .reload-link{
+        margin-left: 5px;
+        margin-right: 5px;
+        font-size: 100%;
+    }
+</style>
 <link rel="stylesheet" type="text/css" href="~/Content/font-awesome.css">
 
 
@@ -29,10 +37,9 @@
 <div class="summary-dashboard">
     <h3 class="header">
         <a href="/sql/servers">SQL Instances</a><span class="note">:</span> @i.IconSpan() @i.Name
+        <a href=@Url.Action("Charts","SQL", new { node = i.Name }) class="reload-link"><i class="fa fa-line-chart"></i> Charts</a>
+        
         <a href=@Url.Action("SaveSnapshot", "SQL", new { node = i.Name }) class="reload-link" > <i class="fa fa-download"></i> Save</a>
-        @Helpers.PollNow(i)
-        @Html.ActionLink("Snapshot", "SaveSnapshot", new{node = i.Name})
-        @Html.ActionLink("Charts", "Charts", new { node = i.Name })
     </h3>
 @if (i.LastFetch == null)
 {

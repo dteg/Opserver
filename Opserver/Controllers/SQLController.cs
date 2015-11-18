@@ -116,6 +116,22 @@ namespace StackExchange.Opserver.Controllers
             return View(list);
         }
 
+        [Route("sql/delete")]
+        public ActionResult Delete()
+        {
+            var snapshotList = NodeSnapshotList.NodesSnapshotList(context);
+            return View(snapshotList);
+        }
+
+        [Route("sql/delete")]
+        [HttpPost]
+        public ActionResult Delete(int snapshotID)
+        {
+            var snapshotList = NodeSnapshotList.NodesSnapshotList(context);
+            SnapshotNodeModel.DeleteSnapshot(context,snapshotID);
+            return View(snapshotList);
+        }
+
         [Route("sql/instance/summary/{type}")]
         public ActionResult InstanceSummary(string node, string type)
         {

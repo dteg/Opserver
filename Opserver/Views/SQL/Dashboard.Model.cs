@@ -11,7 +11,8 @@ namespace StackExchange.Opserver.Views.SQL
         Connections,
         Databases,
         Compare,
-        Charts
+        Charts,
+        Delete
     }
 
     public class DashboardModel

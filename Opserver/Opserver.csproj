@@ -182,6 +182,7 @@
     <Compile Include="Helpers\CustomQueries.cs" />
     <Compile Include="Models\ChartsModel.cs" />
     <Compile Include="Models\DiskStats.cs" />
+    <Compile Include="Models\NodeSnapshotList.cs" />
     <Compile Include="Models\SnapshotModel.cs" />
     <Compile Include="Views\SQL\Instance.Model.cs">
       <DependentUpon>Instance.cshtml</DependentUpon>
@@ -695,6 +696,8 @@
     <Content Include="Views\SQL\Charts.cshtml" />
     <Content Include="Views\SQL\Compare.cshtml" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Shared\_Menu.cshtml" />
+    <Content Include="Views\SQL\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\ajax-loader.gif" />

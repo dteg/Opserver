@@ -1,0 +1,54 @@
+﻿@model List<Opserver.NodeSnapshotList>
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/Master.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="~/Content/font-awesome.css">
+<script src="~/Scripts/bootstrap.js"></script>
+
+@{ Html.Partial("~/Views/Shared/_Menu.cshtml");}
+
+
+<div class="bottom-sub-section">
+    <div class="summary-dashboard">
+        <h2 class="header">Delete Snapshot</h2>
+        @using(Html.BeginForm("Delete", "SQL", FormMethod.Post))
+        {
+        <div class="col-md-2">
+            <select class="form-control" id="nodeSelect" name="node">
+                <option class="node-name" value=""></option>
+                @foreach (var node in Model)
+                {
+                    <option class="node-name" value="@node.NodeName.ToLower()">@node.NodeName</option>
+                }
+            </select>
+        </div>
+        <div id="snap-select-list" class="col-md-3">
+        @foreach (var node in Model)
+        {
+            @Html.DropDownList("snapshotID",new SelectList(node.SnapshotList,"Value","Text"), new {@class ="form-control " + @node.NodeName.ToLower()})
+        }
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger pull-left" type="submit" value="Compare"><i class="fa fa-remove"></i> Delete</button>
+        </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#snap-select-list').hide();
+
+        $('#nodeSelect').on('change', function () {
+            $('#snap-select-list').show();
+            $('#snap-select-list').children().hide();
+            var value = $(this).val();
+            $('.' + value).show();
+            
+
+        })
+
+    });
+</script>

@@ -31,6 +31,15 @@ namespace Opserver
             Sessions = Convert.ToInt32(node.ServerProperties.Data.SessionCount);
             MaxWorkers = Convert.ToInt32(node.ServerProperties.Data.MaxWorkersCount);
 
+            TotalServerMemory =
+                Convert.ToInt32(node.GetPerfCounter("Memory Manager", "Total Server Memory (KB)", "").CurrentValue);
+            TargetServerMemory =
+                Convert.ToInt32(node.GetPerfCounter("Memory Manager", "Target Server Memory (KB)", "").CurrentValue);
+            DatabaseCacheMemory =
+                Convert.ToInt32(node.GetPerfCounter("Memory Manager", "Database Cache Memory (KB)", "").CurrentValue);
+            FreeMemory =
+                Convert.ToInt32(node.GetPerfCounter("Memory Manager", "Free Memory (KB)", "").CurrentValue);
+
             DataFilesSize =
                 Convert.ToInt32(node.GetPerfCounter("Databases", "Data File(s) Size (KB)", "_Total").CurrentValue);
             LogFileSize =
@@ -113,6 +122,24 @@ namespace Opserver
           
             });
 
+            context.SaveChanges();
+
+            return "Success";
+        }
+
+        /// <summary>
+        /// Deletes a snapshot based on the ID given
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="snapshotID"></param>
+        /// <returns></returns>
+        public static string DeleteSnapshot(Entities context, int snapshotID)
+        {
+            var snapshotNode = context.SnapshotNodes.FirstOrDefault(x => x.SnapshotID == snapshotID);
+            var snapshot = new Snapshot { SnapshotID = snapshotID };
+            context.Entry(snapshotNode).State = System.Data.Entity.EntityState.Deleted;
+            context.SaveChanges();
+            context.Entry(snapshot).State = System.Data.Entity.EntityState.Deleted;
             context.SaveChanges();
 
             return "Success";

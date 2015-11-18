@@ -20,28 +20,7 @@
         float: none;
     }
 </style>
-
-<div class="tabs sub-tabs">
-    <div class="tabs-links">
-        <a class="selected" href="/sql/servers">all servers</a>
-
-        <a class="" href="/sql/instance">instance</a>
-
-        <a class="" href="/sql/top">top</a>
-
-        <a class="" href="/sql/active">active</a>
-
-        <a class="" href="/sql/connections">connections</a>
-
-        <a class="" href="/sql/databases">databases</a>
-
-        <a class="" href="charts">charts</a>
-
-        <a class="" href="compare">compare</a>
-
-    </div>
-</div>
-
+@{Html.RenderPartial("~/Views/Shared/_Menu.cshtml");}
 
 <div class="bottom-sub-section">
     <div class="summary-dashboard">
