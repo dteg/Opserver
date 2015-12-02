@@ -14,277 +14,585 @@
     var cpu_data = Model.cpu_json;
     var ram_data = Model.ram_json;
     var connections_data = Model.connections_json;
+    var sessions_data = Model.sessions_json;
+    var maxworkers_data = Model.maxWorkers_json;
+    var datafilesize_data = Model.dataFileSize_json;
+    var logFileSize_data = Model.logFileSize_json;
+    var logFileUsedSize_data = Model.logFileUsedSize_json;
+    var freeSpaceInTempDB_data = Model.freeSpaceinTempDB_json;
+    var pageLifeExpectancy_data = Model.pageLifeExpectancy_json;
+    var pageLookupsSec_data = Model.pageLookupSec_json;
+    var databasePages_data = Model.databasePages_json;
+    var cacheHitRatio_data = Model.cacheHitRatio_json;
+
+
+    var instances = SQLInstance.AllInstances;
 }
 
+
 <head>
-	<script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
-	<script src="~/Scripts/highcharts/4.1.5/highcharts.js"></script>
-	<script src="~/Scripts/highcharts/4.1.5/modules/exporting.js"></script>
-	<script src="~/Scripts/bootstrap.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/highcharts/4.1.5/highcharts.js"></script>
+<script src="~/Scripts/highcharts/4.1.5/modules/exporting.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"></link>
-	<link rel="stylesheet" type="text/css" href="~/Content/bootstrap-theme.css"></link>
-	
-</head>
+<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"></link>
+<link rel="stylesheet" type="text/css" href="~/Content/bootstrap-theme.css"></link>
+       
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("#nodeList").change(function()
+            {
+                window.location.href="?node=" + $("#nodeList").val();
+            });
+        });
+    </script>
 
-@{Html.RenderPartial("~/Views/Shared/_Menu.cshtml");}
-
+	</head>
 <body>
 
 
-	<h2>Charts - Node: @Model.nodeName</h2>
+    <h2>Charts - Node: @Model.nodeName</h2>
 
-	<div class="row">
-	<div id="container_brs" class="col-md-4"></div>
-	<div id="container_sqlc" class="col-md-4"></div>
-	<div id="container_trs" class="col-md-4"></div>
-		</div>
-	<div class="row">
-	<div id="container_idxs" class="col-md-4"></div>
-	<div id="container_lrs" class="col-md-4"></div>
-	<div id="container_ers" class="col-md-4"></div>
-		</div>
-	<div class="row">
-		<div id="container_cpu" class="col-md-4"></div>
-		<div id="container_ram" class="col-md-4"></div>
-		<div id="container_connections" class="col-md-4"></div>
-	</div>
+    <select id="nodeList">
+        @foreach (var i in instances)
+        {
+            var props = i.ServerProperties.SafeData(true);
+            <option value="@i.Name">@i.Name</option>
+                
+        }
+    </select>
 
-	<script type="text/javascript">
+    <div class="row">
+    <div id="container_brs" class="col-md-4"></div>
+    <div id="container_sqlc" class="col-md-4"></div>
+    <div id="container_trs" class="col-md-4"></div>
+        </div>
+    <div class="row">
+    <div id="container_idxs" class="col-md-4"></div>
+    <div id="container_lrs" class="col-md-4"></div>
+    <div id="container_ers" class="col-md-4"></div>
+        </div>
+    <div class="row">
+        <div id="container_cpu" class="col-md-4"></div>
+        <div id="container_ram" class="col-md-4"></div>
+        <div id="container_connections" class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div id="container_sessions" class="col-md-4"></div>
+        <div id="container_maxworkers" class="col-md-4"></div>
+        <div id="container_datafilesize" class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div id="container_lfs" class="col-md-4"></div>
+        <div id="container_lfus" class="col-md-4"></div>
+        <div id="container_fsitdb" class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div id="container_ple" class="col-md-4"></div>
+        <div id="container_pls" class="col-md-4"></div>
+        <div id="container_dp" class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div id="container_chr" class="col-md-4"></div>
+    </div>
 
-	$('#container_brs').highcharts({
-	chart: {
-	type: 'area',
-	zoomType: 'x'
-	},
-	title: {
-	text: "Batch Requests/sec"
-	},
-	xAxis: {
-	type: 'datetime',
-	title: {
-	text: "Snapshot ID"
-	}
-	},
-	yAxis: {
-	title: {
-	text: "Value"
-	}
-	},
+    <script type="text/javascript">
 
-	series: [{
-		data: @brs_data,
-	name: 'Batch Requests/sec'
-	}]
-	});
+    $('#container_brs').highcharts({
+    chart: {
+    type: 'area',
+    zoomType: 'x'
+    },
+    title: {
+    text: "Batch Requests/sec"
+    },
+    xAxis: {
+    type: 'datetime',
+    title: {
+    text: "Snapshot ID"
+    }
+    },
+    yAxis: {
+    title: {
+    text: "Value"
+    }
+    },
 
-		$('#container_sqlc').highcharts({
-	chart: {
-	type: 'area',
-	zoomType: 'x'
-	},
-	title: {
-	text: "SQL Compilations/sec"
-	},
-	xAxis: {
-	type: 'datetime',
-	title: {
-	text: "Snapshot ID"
-	}
-	},
-	yAxis: {
-	title: {
-	text: "Value"
-	}
-	},
+    series: [{
+        data: @brs_data,
+    name: 'Batch Requests/sec'
+    }]
+    });
 
-	series: [{
-		data: @sqlc_data,
-	name: 'SQL Compilations/sec'
-	}]
-		});
+        $('#container_sqlc').highcharts({
+    chart: {
+    type: 'area',
+    zoomType: 'x'
+    },
+    title: {
+    text: "SQL Compilations/sec"
+    },
+    xAxis: {
+    type: 'datetime',
+    title: {
+    text: "Snapshot ID"
+    }
+    },
+    yAxis: {
+    title: {
+    text: "Value"
+    }
+    },
+
+    series: [{
+        data: @sqlc_data,
+    name: 'SQL Compilations/sec'
+    }]
+        });
 
 
-		$('#container_trs').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "Transactions/sec"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_trs').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Transactions/sec"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @trs_data,
-				name: 'Transactions/sec'
-			}]
-		});
+            series: [{
+                data: @trs_data,
+                name: 'Transactions/sec'
+            }]
+        });
 
-		$('#container_idxs').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "Index Searches/sec"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_idxs').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Index Searches/sec"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @idxs_data,
-				name: 'Index Searches/sec'
-			}]
-		});
+            series: [{
+                data: @idxs_data,
+                name: 'Index Searches/sec'
+            }]
+        });
 
-		$('#container_lrs').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "Lock Requests/sec"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_lrs').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Lock Requests/sec"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @lrs_data,
-				name: 'Lock Requests/sec'
-			}]
-		});
+            series: [{
+                data: @lrs_data,
+                name: 'Lock Requests/sec'
+            }]
+        });
 
-		$('#container_ers').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "Errors/sec"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_ers').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Errors/sec"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @ers_data,
-				name: 'Errors/sec'
-			}]
-		});
+            series: [{
+                data: @ers_data,
+                name: 'Errors/sec'
+            }]
+        });
 
-		$('#container_cpu').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "CPU"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_cpu').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "CPU"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @cpu_data,
-				name: 'CPU'
-			}]
-		});
+            series: [{
+                data: @cpu_data,
+                name: 'CPU'
+            }]
+        });
 
-		$('#container_ram').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "RAM"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_ram').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "RAM"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @ram_data,
-				name: 'RAM'
-			}]
-		});
+            series: [{
+                data: @ram_data,
+                name: 'RAM'
+            }]
+        });
 
-		$('#container_connections').highcharts({
-			chart: {
-				type: 'area',
-				zoomType: 'x'
-			},
-			title: {
-				text: "Connections"
-			},
-			xAxis: {
-				type: 'datetime',
-				title: {
-					text: "Snapshot ID"
-				}
-			},
-			yAxis: {
-				title: {
-					text: "Value"
-				}
-			},
+        $('#container_connections').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Connections"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
 
-			series: [{
-				data: @connections_data,
-				name: 'Connections'
-			}]
-		});
-	</script> 
-	</body>
+            series: [{
+                data: @connections_data,
+                name: 'Connections'
+            }]
+        });
+
+        $('#container_sessions').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Sessions"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @sessions_data,
+                name: 'Sessions'
+            }]
+        });
+
+        $('#container_maxworkers').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Max Workers"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @maxworkers_data,
+                name: 'MaxWorkers'
+            }]
+        });
+
+        $('#container_datafilesize').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Data File Size"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @datafilesize_data,
+                name: 'Log File Size'
+            }]
+        });
+
+        $('#container_lfs').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Log File Size"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @logFileSize_data,
+                name: 'Log File Size'
+            }]
+        });
+
+        $('#container_lfus').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Log File Used Size"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @logFileUsedSize_data,
+                name: 'Log File Used Size'
+            }]
+        });
+
+        $('#container_fsitdb').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Free SPace in TempDB"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @freeSpaceInTempDB_data,
+                name: 'Free Space in TempDB'
+            }]
+        });
+
+        $('#container_ple').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Page Life Expectancy"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @pageLifeExpectancy_data,
+                name: 'Page Life Expectancy'
+            }]
+        });
+
+        $('#container_pls').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Page Lookups/sec"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @pageLookupsSec_data,
+                name: 'Page Lookups/sec'
+            }]
+        });
+
+        $('#container_dp').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Database Pages"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @databasePages_data,
+                name: 'Database Pages'
+            }]
+        });
+
+        $('#container_chr').highcharts({
+            chart: {
+                type: 'area',
+                zoomType: 'x'
+            },
+            title: {
+                text: "Cache Hit Ratio"
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: "Snapshot ID"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: "Value"
+                }
+            },
+
+            series: [{
+                data: @cacheHitRatio_data,
+                name: 'Cache Hit Ratio'
+            }]
+        });
+    </script> 
+    </body>

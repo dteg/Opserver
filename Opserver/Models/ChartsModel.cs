@@ -23,25 +23,34 @@ namespace StackExchange.Opserver.Models
         public List<int> sessions = new List<int>();
         public List<int> maxWorkers = new List<int>();
         public List<int> dataFileSize = new List<int>();
-
+        public List<int> logFileSize = new List<int>();
+        public List<int> logFileUsedSize = new List<int>();
+        public List<int> freeSpaceinTempDB = new List<int>();
+        public List<int> pageLifeExpectancy = new List<int>();
+        public List<int> pageLookupSec = new List<int>();
+        public List<int> databasePages = new List<int>();
+        public List<int> cacheHitRatio = new List<int>();
 
         public List<DateTime> snapshotDate = new List<DateTime>();
         public List<int> nodeList = new List<int>();
         
         //public String nodeNumber = "";
         public String nodeName = "";
-        public String brs_json, SQLCompilationsSec_json, trs_json, idxs_json, lrs_json, ers_json, cpu_json, ram_json, connections_json = "";
+        public String brs_json, SQLCompilationsSec_json, trs_json, idxs_json, lrs_json, ers_json, cpu_json, ram_json, connections_json, sessions_json, maxWorkers_json, dataFileSize_json, logFileSize_json, logFileUsedSize_json, freeSpaceinTempDB_json, pageLifeExpectancy_json, pageLookupSec_json, databasePages_json, cacheHitRatio_json = "";
 
 
         public ChartsModel(Entities context, int nodeID)
         {
             //get node with ID
+            //var node = context.Nodes.FirstOrDefault(x => x.NodeID == nodeID);
             var node = context.Nodes.FirstOrDefault(x => x.NodeID == nodeID);
             //nodeNumber = nodeID.ToString();
             nodeName = node.NodeName; //get name for page
 
             //add in data into list arrays
-            foreach (var snapshotnode in node.SnapshotNodes)
+            DateTime fourteenAgo = DateTime.Today.AddDays(-14);
+            var snaps = node.SnapshotNodes.Where(x => x.Date > fourteenAgo);
+            foreach (var snapshotnode in snaps)
             {
                 var snapshot = snapshotnode.Snapshot;
                 snapshotDate.Add(snapshotnode.Date);
@@ -55,7 +64,16 @@ namespace StackExchange.Opserver.Models
                 CPU.Add((int)snapshot.CPU);
                 RAM.Add((int)snapshot.RAM);
                 connections.Add((int)snapshot.Connections);
-
+                sessions.Add((int)snapshot.Sessions);
+                maxWorkers.Add((int)snapshot.MaxWorkers);
+                dataFileSize.Add((int)snapshot.DataFilesSize);
+                logFileSize.Add((int)snapshot.LogFileSize);
+                logFileUsedSize.Add((int)snapshot.LogFileUsedSize);
+                freeSpaceinTempDB.Add((int)snapshot.FreeSpaceinTempDB);
+                pageLifeExpectancy.Add((int)snapshot.PageLifeExpectancy);
+                pageLookupSec.Add((int)snapshot.PageLookupsSec);
+                databasePages.Add((int)snapshot.DatabasePages);
+                cacheHitRatio.Add((int)snapshot.CacheHitRatio);
             }
 
             brs_json = convertToJson(this.batchRequestSec);
@@ -67,6 +85,16 @@ namespace StackExchange.Opserver.Models
             cpu_json = convertToJson(this.CPU);
             ram_json = convertToJson(this.RAM);
             connections_json = convertToJson(this.connections);
+            sessions_json = convertToJson(this.sessions);
+            maxWorkers_json = convertToJson(this.maxWorkers);
+            dataFileSize_json = convertToJson(this.dataFileSize);
+            logFileSize_json = convertToJson(this.logFileSize);
+            logFileUsedSize_json = convertToJson(this.logFileUsedSize);
+            freeSpaceinTempDB_json = convertToJson(this.freeSpaceinTempDB);
+            pageLifeExpectancy_json = convertToJson(this.pageLifeExpectancy);
+            pageLookupSec_json = convertToJson(this.pageLookupSec);
+            databasePages_json = convertToJson(this.databasePages);
+            cacheHitRatio_json = convertToJson(this.cacheHitRatio);
 
         }
 
