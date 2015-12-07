@@ -13,7 +13,10 @@ namespace Opserver
 {
     public class SnapshotNodeModel
     {
-
+        /// <summary>
+        /// Generate a SnapshotNodeModel from a SQL Instance
+        /// </summary>
+        /// <param name="node"></param>
         public SnapshotNodeModel(SQLInstance node)
         {
             NodeName = node.Name;
@@ -67,9 +70,9 @@ namespace Opserver
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string SaveSnapshot(Entities context)
+        public int SaveSnapshot(Entities context)
         {
-            //Check if node exists in db
+            //Check if node exists in db if so, pull it's information
             if (context.Nodes.Any(x => x.NodeName == NodeName))
             {
                 NodeID = context.Nodes.SingleOrDefault(x => x.NodeName == NodeName).NodeID;
@@ -83,7 +86,7 @@ namespace Opserver
                 context.SaveChanges();
                 NodeID = node.NodeID;
             }
-            //Create the snapshot using current object
+            //Create the snapshot using current object -- potential use of Automapper to automate this
             var snapshot = context.Snapshots.Add(new Snapshot 
             {
                 BatchRequestsSec = BatchRequestsSec,
@@ -111,9 +114,9 @@ namespace Opserver
                 ObjectsInCache = ObjectsInCache,
                 CacheHitRatio = CacheHitRatio
             });
-
+            //Save it to make sure DB contraints dont complain.
             context.SaveChanges();
-
+            //Add snapshot node
             context.SnapshotNodes.Add(new Entity.SnapshotNode
             {
                 SnapshotID = snapshot.SnapshotID,
@@ -124,7 +127,7 @@ namespace Opserver
 
             context.SaveChanges();
 
-            return "Success";
+            return snapshot.SnapshotID;
         }
 
         /// <summary>
@@ -135,10 +138,13 @@ namespace Opserver
         /// <returns></returns>
         public static string DeleteSnapshot(Entities context, int snapshotID)
         {
+            
             var snapshotNode = context.SnapshotNodes.FirstOrDefault(x => x.SnapshotID == snapshotID);
             var snapshot = new Snapshot { SnapshotID = snapshotID };
+            //Delete the relationship between snapshotnode and snapshot first
             context.Entry(snapshotNode).State = System.Data.Entity.EntityState.Deleted;
             context.SaveChanges();
+            //Delete the snapshot
             context.Entry(snapshot).State = System.Data.Entity.EntityState.Deleted;
             context.SaveChanges();
 

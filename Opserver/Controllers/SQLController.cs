@@ -82,7 +82,7 @@ namespace StackExchange.Opserver.Controllers
                     nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
                    
                 }
-                catch(Exception e)
+                catch
                 {
                     return View("NodeSelector", new DashboardModel());
                 }

@@ -63,6 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Opserver.Core\Opserver.Core.csproj">
+      <Project>{c58aff99-f4d9-4a83-866e-18da0a633f6b}</Project>
+      <Name>Opserver.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Opserver.Entity\Opserver.Entity.csproj">
       <Project>{3bd83b1d-4f86-4d55-8979-96c2b646e3a7}</Project>
       <Name>Opserver.Entity</Name>
