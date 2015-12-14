@@ -48,8 +48,10 @@ namespace StackExchange.Opserver.Models
             nodeName = node.NodeName; //get name for page
 
             //add in data into list arrays
-            DateTime fourteenAgo = DateTime.Today.AddDays(-14);
-            var snaps = node.SnapshotNodes.Where(x => x.Date > fourteenAgo);
+            //DateTime fourteenAgo = DateTime.Today.AddDays(-14);
+            // var snaps = node.SnapshotNodes.Where(x => x.Date > fourteenAgo);
+            var snaps = node.SnapshotNodes;
+
             foreach (var snapshotnode in snaps)
             {
                 var snapshot = snapshotnode.Snapshot;
@@ -110,13 +112,23 @@ namespace StackExchange.Opserver.Models
                 dates.Add(span.TotalMilliseconds);
             }
 
-            var i = 0;
+            //var i = 0;
             //convert the data into a json string
             var json_string = "[";
-            foreach (var item in stat)
+            var skipNum = 0;
+            if (stat.Count > 25)
             {
-                json_string += "[" + dates.ElementAt(i) + ", " + item + "],";
-                i++;
+                skipNum = stat.Count - 25;
+            }
+            stat.RemoveRange(0, skipNum);
+            dates.RemoveRange(0, skipNum);
+            //foreach (var item in stat)
+            for (var i = 0; i < 25; i++)
+            {
+                if (i < stat.Count)
+                {
+                    json_string += "[" + dates.ElementAt(i) + ", " + stat[i] + "],";
+                }
             }
             json_string = json_string.TrimEnd(",");
             json_string += "]";

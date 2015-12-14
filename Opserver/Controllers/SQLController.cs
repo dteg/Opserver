@@ -12,8 +12,6 @@ using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
 using Opserver.Entity;
-using System.Collections.Generic;
-using StackExchange.Opserver.Tests;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -35,11 +33,11 @@ namespace StackExchange.Opserver.Controllers
         public ActionResult Servers(string cluster, string node, string ag, bool detailOnly = false)
         {
             var vd = new ServersModel
-                {
-                    StandaloneInstances = SQLInstance.AllStandalone,
-                    Clusters = SQLCluster.AllClusters,
-                    Refresh = node.HasValue() ? 10 : 5
-                };
+            {
+                StandaloneInstances = SQLInstance.AllStandalone,
+                Clusters = SQLCluster.AllClusters,
+                Refresh = node.HasValue() ? 10 : 5
+            };
 
             if (cluster.HasValue())
                 vd.CurrentCluster = vd.Clusters.FirstOrDefault(c => string.Equals(c.Name, cluster, StringComparison.OrdinalIgnoreCase));
@@ -81,9 +79,9 @@ namespace StackExchange.Opserver.Controllers
                 try
                 {
                     nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
-                   
+
                 }
-                catch
+                catch (Exception e)
                 {
                     return View("NodeSelector", new DashboardModel());
                 }
@@ -91,9 +89,49 @@ namespace StackExchange.Opserver.Controllers
                 ChartsModel theModel = new ChartsModel(context, nodeID);
                 return View("Charts", theModel);
             }
-          
-           
+
+
         }
+
+        [Route("sql/overlay")]
+        public ActionResult Overlay(string node, string node2)
+        {
+
+            var nodeID = 0;
+            var nodeID2 = 0;
+
+            if (node == null)
+            {
+                //node = "0";
+                return View("OverviewSelector", new DashboardModel());
+            }
+           
+                try
+                {
+                    nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+
+                }
+                catch (Exception e)
+                {
+                    return View("OverviewSelector", new DashboardModel());
+                }
+
+                try
+                {
+                    nodeID2 = context.Nodes.FirstOrDefault(x => x.NodeName == node2).NodeID;
+
+                }
+                catch (Exception e)
+                {
+                    return View("OverviewSelector", new DashboardModel());
+                }
+
+                OverlayModel theModel = new OverlayModel(context, nodeID, nodeID2);
+                return View("Overlay", theModel);
+            
+        }
+
+
 
         [Route("sql/savesnapshot")]
         public ActionResult SaveSnapshot(string node)
@@ -106,75 +144,6 @@ namespace StackExchange.Opserver.Controllers
             
             return RedirectToAction("Instance","SQL", node);
 
-        }
-
-        [Route("sql/compare")]
-        public ActionResult Compare(string node)
-        {
-            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
-            return View();
-        }
-
-        [Route("sql/compare")]
-        [HttpPost]
-        public ActionResult Compare(int snapID1, int snapID2)
-        {
-            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
-            var list = new List<SnapshotNodeModel>();
-            list.Add(SnapshotNodeModel.GetByID(snapID1, context));
-            list.Add(SnapshotNodeModel.GetByID(snapID2, context));
-            return View(list);
-        }
-
-        [Route("sql/delete")]
-        public ActionResult Delete()
-        {
-            var snapshotList = NodeSnapshotList.NodesSnapshotList(context);
-            return View(snapshotList);
-        }
-
-        [Route("sql/delete")]
-        [HttpPost]
-        public ActionResult Delete(int snapshotID)
-        {
-            var snapshotList = NodeSnapshotList.NodesSnapshotList(context);
-            SnapshotNodeModel.DeleteSnapshot(context,snapshotID);
-            return View(snapshotList);
-        }
-
-        [Route("sql/tests")]
-        public ActionResult Tests()
-        {
-            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
-            return View(new DashboardModel());
-        }
-
-        [Route("sql/tests/ef")]
-        public string EFTest(string nodeName)
-        {
-            var test = new SQLEntityTests(context);
-            return test.ContextConnection();
-        }
-
-        [Route("sql/tests/node")]
-        public string NodeTest(string nodeName)
-        {
-            var test = new SQLEntityTests(context);
-            return test.DoNodeExist(nodeName);
-        }
-
-        [Route("sql/tests/snapshot")]
-        public string SnapshotTest(string nodeName)
-        {
-            var test = new SQLEntityTests(context);
-            return test.DoSnapshotExist(nodeName);
-        }
-
-        [Route("sql/tests/savepull")]
-        public string SavePullTest(string nodeName)
-        {
-            var test = new SQLEntityTests(context);
-            return test.SaveAndPull(nodeName);
         }
 
         [Route("sql/instance/summary/{type}")]
