@@ -184,6 +184,7 @@
     <Compile Include="Models\DiskStats.cs" />
     <Compile Include="Models\NodeSnapshotList.cs" />
     <Compile Include="Models\SnapshotModel.cs" />
+    <Compile Include="Tests\SQLEntityTests.cs" />
     <Compile Include="Views\SQL\Instance.Model.cs">
       <DependentUpon>Instance.cshtml</DependentUpon>
     </Compile>
@@ -699,6 +700,7 @@
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\SQL\Delete.cshtml" />
     <Content Include="Views\SQL\NodeSelector.cshtml" />
+    <Content Include="Views\SQL\Tests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\ajax-loader.gif" />

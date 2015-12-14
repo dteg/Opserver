@@ -1,0 +1,76 @@
+﻿@using StackExchange.Opserver.Data.SQL
+@using StackExchange.Opserver.Views.SQL
+@{
+    ViewBag.Title = "Tests";
+    Layout = "~/Views/Shared/Master.cshtml";
+    var instances = SQLInstance.AllInstances;
+}
+
+<link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="~/Content/font-awesome.css">
+<script src="~/Scripts/bootstrap.js"></script>
+
+@Html.Partial("~/Views/Shared/_Menu.cshtml")
+
+<div class="row">
+
+</div>
+
+<div class="alert alert-warning" role="alert">
+    <div class="text-center">
+        Please Select Node To Test:
+
+        <select id="nodeList">
+            @foreach (var i in instances)
+            {
+                var props = i.ServerProperties.SafeData(true);
+                <option value="@i.Name">@i.Name</option>
+
+            }
+        </select>
+
+        <br />
+        If alert turns green, test has passed. If it turns red, the test failed.
+    </div>
+</div>
+
+<div id="ef-test" class="alert alert-info" role="alert">
+    <b>Context Test:</b> Entity Framework is functional <a id="ef" class="pull-right btn btn-primary" data-url=@Url.Action("EFTest","SQL")> <i class="fa fa-flask"></i> Run Test</a>
+</div>
+
+<div id="node-test" class="alert alert-info" role="alert">
+    <b>Node Test:</b> Does Selected Node Exist? <a id="node" class="pull-right btn btn-primary" data-url=@Url.Action("NodeTest","SQL")> <i class="fa fa-flask"></i> Run Test</a>
+</div>
+
+<div id="snapshot-test" class="alert alert-info" role="alert">
+    <b>Snapshot Test:</b> Does A Snapshot For Selected Node Exist? <a id="snapshot" class="pull-right btn btn-primary" data-url=@Url.Action("SnapshotTest","SQL")> <i class="fa fa-flask"></i> Run Test</a>
+</div>
+
+<div id="savepull-test" class="alert alert-info" role="alert">
+    <b>Save And Pull Test:</b> Can Selected Node Save Snapshot? Can snapshot be pulled? <a id="savepull" class="pull-right btn btn-primary" data-url=@Url.Action("SavePullTest","SQL")> <i class="fa fa-flask"></i> Run Test</a>
+</div>
+
+<script type="text/javascript">
+    $('a').click(function () {
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('id');
+        $.ajax({
+            url: url,
+            data: {
+                nodeName: $('#nodeList').val()
+            },
+            type: 'GET',
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (response) {
+                if (response == "Success") {
+                    $('#' + id + '-test').removeClass().addClass('alert alert-success')
+                }
+                else {
+                    $('#' + id + '-test').removeClass().addClass('alert alert-danger')
+                }
+            }
+        })
+    });
+</script>

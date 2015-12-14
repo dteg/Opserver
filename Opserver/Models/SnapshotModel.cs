@@ -152,7 +152,7 @@ namespace Opserver
         }
 
         /// <summary>
-        /// Return the list of NodeIDs and Names for select list
+        /// Return the list of snapshots and Names for select list
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>

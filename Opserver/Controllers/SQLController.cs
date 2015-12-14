@@ -13,6 +13,7 @@ using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.SQL;
 using Opserver.Entity;
 using System.Collections.Generic;
+using StackExchange.Opserver.Tests;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -139,6 +140,41 @@ namespace StackExchange.Opserver.Controllers
             var snapshotList = NodeSnapshotList.NodesSnapshotList(context);
             SnapshotNodeModel.DeleteSnapshot(context,snapshotID);
             return View(snapshotList);
+        }
+
+        [Route("sql/tests")]
+        public ActionResult Tests()
+        {
+            ViewBag.NodeList = SnapshotNodeModel.GetNodes(context);
+            return View(new DashboardModel());
+        }
+
+        [Route("sql/tests/ef")]
+        public string EFTest(string nodeName)
+        {
+            var test = new SQLEntityTests(context);
+            return test.ContextConnection();
+        }
+
+        [Route("sql/tests/node")]
+        public string NodeTest(string nodeName)
+        {
+            var test = new SQLEntityTests(context);
+            return test.DoNodeExist(nodeName);
+        }
+
+        [Route("sql/tests/snapshot")]
+        public string SnapshotTest(string nodeName)
+        {
+            var test = new SQLEntityTests(context);
+            return test.DoSnapshotExist(nodeName);
+        }
+
+        [Route("sql/tests/savepull")]
+        public string SavePullTest(string nodeName)
+        {
+            var test = new SQLEntityTests(context);
+            return test.SaveAndPull(nodeName);
         }
 
         [Route("sql/instance/summary/{type}")]
