@@ -33,11 +33,11 @@ namespace StackExchange.Opserver.Controllers
         public ActionResult Servers(string cluster, string node, string ag, bool detailOnly = false)
         {
             var vd = new ServersModel
-                {
-                    StandaloneInstances = SQLInstance.AllStandalone,
-                    Clusters = SQLCluster.AllClusters,
-                    Refresh = node.HasValue() ? 10 : 5
-                };
+            {
+                StandaloneInstances = SQLInstance.AllStandalone,
+                Clusters = SQLCluster.AllClusters,
+                Refresh = node.HasValue() ? 10 : 5
+            };
 
             if (cluster.HasValue())
                 vd.CurrentCluster = vd.Clusters.FirstOrDefault(c => string.Equals(c.Name, cluster, StringComparison.OrdinalIgnoreCase));
@@ -79,9 +79,9 @@ namespace StackExchange.Opserver.Controllers
                 try
                 {
                     nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
-                   
+
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return View("NodeSelector", new DashboardModel());
                 }
@@ -89,9 +89,49 @@ namespace StackExchange.Opserver.Controllers
                 ChartsModel theModel = new ChartsModel(context, nodeID);
                 return View("Charts", theModel);
             }
-          
-           
+
+
         }
+
+        [Route("sql/overlay")]
+        public ActionResult Overlay(string node, string node2)
+        {
+
+            var nodeID = 0;
+            var nodeID2 = 0;
+
+            if (node == null)
+            {
+                //node = "0";
+                return View("OverviewSelector", new DashboardModel());
+            }
+           
+                try
+                {
+                    nodeID = context.Nodes.FirstOrDefault(x => x.NodeName == node).NodeID;
+
+                }
+                catch (Exception e)
+                {
+                    return View("OverviewSelector", new DashboardModel());
+                }
+
+                try
+                {
+                    nodeID2 = context.Nodes.FirstOrDefault(x => x.NodeName == node2).NodeID;
+
+                }
+                catch (Exception e)
+                {
+                    return View("OverviewSelector", new DashboardModel());
+                }
+
+                OverlayModel theModel = new OverlayModel(context, nodeID, nodeID2);
+                return View("Overlay", theModel);
+            
+        }
+
+
 
         [Route("sql/savesnapshot")]
         public ActionResult SaveSnapshot(string node)

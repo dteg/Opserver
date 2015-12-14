@@ -1,0 +1,37 @@
+﻿@using StackExchange.Opserver.Data.SQL
+@{
+    Layout = "~/Views/Shared/Master.cshtml";
+    var instances = SQLInstance.AllInstances;
+}
+<script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("#submit").click(function()
+            {
+                window.location.href="overlay?node=" + $("#nodeList").val() + "&node2=" + $("#nodeList2").val();
+            });
+
+        });
+</script>
+<div class="node-selector">
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <h2>Select two nodes:</h2>
+    <select id="nodeList">
+        @foreach (var i in instances)
+        {
+            var props = i.ServerProperties.SafeData(true);
+            <option value="@i.Name">@i.Name</option>
+
+        }
+    </select>
+    <select id="nodeList2">
+        @foreach (var i in instances)
+            {
+                var props = i.ServerProperties.SafeData(true);
+            <option value="@i.Name">@i.Name</option>
+
+        }
+    </select>
+    <input id="submit" type="submit" />
+</div>
